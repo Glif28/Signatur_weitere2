@@ -22,7 +22,7 @@ try {
 } catch { }
 
 $OutputEncoding = [System.Text.UTF8Encoding]::new($true)
-[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($true)
+try { [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($true) } catch { }
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8BOM'
 
 Add-Type -AssemblyName System.Windows.Forms
