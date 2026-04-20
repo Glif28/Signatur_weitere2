@@ -211,7 +211,7 @@ $lblCheckboxSection.AutoSize = $true
 $sidebar.Controls.Add($lblCheckboxSection)
 
 $chkGreeting = New-Object System.Windows.Forms.CheckBox
-$chkGreeting.Text = "Grusformel"
+$chkGreeting.Text = "Grußformel"
 $chkGreeting.Location = [System.Drawing.Point]::new(15, 395)
 $chkGreeting.Checked = $true
 $chkGreeting.AutoSize = $true
@@ -350,17 +350,19 @@ $preview.ScrollBars = "Vertical"
 $previewPanel.Controls.Add($preview)
 
 # --- TRANSLATIONS ---
+$script:CommonDisclaimer = "The information contained within this communication is confidential and may be legally privileged. If you are not the intended recipient, you are hereby notified that any dissemination, copying or distribution of this communication, or the taking of any action in reliance on the contents of this communication, is strictly prohibited. Please notify the sender of this e-mail immediately and delete or destroy all copies of this communication."
+
 function Get-Translations {
     if ($langBox.SelectedIndex -eq 0) {
         return @{
             Greeting = "Mit freundlichen Grüßen"
-            Disclaimer = "The information contained within this communication is confidential and may be legally privileged. If you are not the intended recipient, you are hereby notified that any dissemination, copying or distribution of this communication, or the taking of any action in reliance on the contents of this communication, is strictly prohibited. Please notify the sender of this e-mail immediately and delete or destroy all copies of this communication."
+            Disclaimer = $script:CommonDisclaimer
             Footer = "Sitz: Wiesbaden, Registergericht: Amtsgericht Wiesbaden, HRB 9569`nGeschäftsführer: Alexander Kraus, Rainer Schwöbel, Dr. Matthias Wellers"
         }
     } else {
         return @{
             Greeting = "Best Regards"
-            Disclaimer = "The information contained within this communication is confidential and may be legally privileged. If you are not the intended recipient, you are hereby notified that any dissemination, copying or distribution of this communication, or the taking of any action in reliance on the contents of this communication, is strictly prohibited. Please notify the sender of this e-mail immediately and delete or destroy all copies of this communication."
+            Disclaimer = $script:CommonDisclaimer
             Footer = "Registered Office: Wiesbaden, District Court: Amtsgericht Wiesbaden, HRB 9569`nManaging Directors: Alexander Kraus, Jan Marek, Rainer Schwöbel, Dr. Matthias Wellers"
         }
     }
