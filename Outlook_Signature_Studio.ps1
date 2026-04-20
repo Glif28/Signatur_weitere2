@@ -145,10 +145,10 @@ function CreateTextBox {
 # --- HAUPTFENSTER MIT GRAUER FARBE (OHNE TITELLEISTE) ---
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Outlook Signature Studio - v3.0"
-$form.Size = [System.Drawing.Size]::new(1250, 910)
+$form.Size = [System.Drawing.Size]::new(1870, 910)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "Sizable"
-$form.MinimumSize = [System.Drawing.Size]::new(1200, 800)
+$form.MinimumSize = [System.Drawing.Size]::new(1800, 800)
 $form.BackColor = $script:Colors.GrayBg
 $form.ShowInTaskbar = $true
 $form.TopMost = $true
@@ -349,6 +349,46 @@ $preview.Font = [System.Drawing.Font]::new("Segoe UI", 9)
 $preview.ScrollBars = "Vertical"
 $previewPanel.Controls.Add($preview)
 
+# --- SKRIPT PANEL (RECHTS) ---
+$scriptPanel = New-Object System.Windows.Forms.Panel
+$scriptPanel.Location = [System.Drawing.Point]::new(1210, 0)
+$scriptPanel.Size = [System.Drawing.Size]::new(640, 950)
+$scriptPanel.BackColor = $script:Colors.GrayBg
+$scriptPanel.BorderStyle = "FixedSingle"
+$form.Controls.Add($scriptPanel)
+
+$lblScript = New-Object System.Windows.Forms.Label
+$lblScript.Text = "SKRIPT"
+$lblScript.Location = [System.Drawing.Point]::new(10, 12)
+$lblScript.Font = [System.Drawing.Font]::new("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
+$lblScript.ForeColor = [System.Drawing.Color]::Gray
+$lblScript.AutoSize = $true
+$scriptPanel.Controls.Add($lblScript)
+
+$btnCopyScript = CreateModernButton "SKRIPT KOPIEREN" 38 $script:Colors.Primary $script:Colors.PrimaryHover "Copy"
+$btnCopyScript.Width = 210
+$btnCopyScript.Location = [System.Drawing.Point]::new(10, 38)
+$scriptPanel.Controls.Add($btnCopyScript)
+
+$scriptBox = New-Object System.Windows.Forms.TextBox
+$scriptBox.Location = [System.Drawing.Point]::new(10, 88)
+$scriptBox.Size = [System.Drawing.Size]::new(616, 852)
+$scriptBox.Multiline = $true
+$scriptBox.ReadOnly = $true
+$scriptBox.ScrollBars = "Both"
+$scriptBox.WordWrap = $false
+$scriptBox.Font = [System.Drawing.Font]::new("Consolas", 8)
+$scriptBox.BackColor = [System.Drawing.Color]::White
+$scriptBox.ForeColor = [System.Drawing.Color]::Black
+$scriptBox.BorderStyle = "FixedSingle"
+$scriptPanel.Controls.Add($scriptBox)
+
+if ($PSCommandPath -and (Test-Path $PSCommandPath)) {
+    $scriptBox.Text = [System.IO.File]::ReadAllText($PSCommandPath)
+} else {
+    $scriptBox.Text = "# Skriptpfad nicht gefunden.`n# Bitte direkt aus der Datei kopieren."
+}
+
 # --- TRANSLATIONS ---
 function Get-Translations {
     if ($langBox.SelectedIndex -eq 0) {
@@ -547,6 +587,15 @@ $btnToggleLegal.Add_Click({
 
 $btnInfo.Add_Click({
     [System.Windows.Forms.MessageBox]::Show("Outlook Signature Editor v3.0`nAVL Deutschland GmbH`n`n2026", "Info", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+})
+
+$btnCopyScript.Add_Click({
+    try {
+        [System.Windows.Forms.Clipboard]::SetText($scriptBox.Text)
+        [System.Windows.Forms.MessageBox]::Show("Skript kopiert!", "Erfolg", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show("Fehler: $_", "Fehler", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
+    }
 })
 
 # --- DARK MODE TOGGLE ---
